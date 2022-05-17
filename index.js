@@ -3,6 +3,7 @@ import express from 'express';
 import { MongoClient } from 'mongodb';
 import dotenv from "dotenv";
 import cors from "cors";
+import { ObjectId } from "mongodb";
 
 dotenv.config();
 
@@ -47,7 +48,7 @@ app.delete('/todo', async function (req, res) {
     oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
 })
 
-// delete todo on query
+// delete todo 
 app.delete('/todo', async function (req, res) {
     const data = req.query;
     const oneTodo = await client.db("todo").collection("todo").findMany(req.query);
@@ -55,10 +56,11 @@ app.delete('/todo', async function (req, res) {
     // oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
 })
 
+// delete todo by id
 app.get('/todo/:id', async function (req, res) {
     const { id } = req.params;
-    const oneTodo = await client.db("todo").collection("todo").findOne({ _id: "6283b49938f52a7baa4a65bb" });
-    console.log(oneTodo);
+    const oneTodo = await client.db("todo").collection("todo").findOne({ _id: ObjectId(id) });
+    // console.log(oneTodo);
     oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
 })
 
