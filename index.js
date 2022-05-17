@@ -20,49 +20,61 @@ async function createConnection() {
 }
 const client = await createConnection();
 
-app.use(express.json());
+app.use(express.json());    // converts data to json
 
 // third party package - middleware
-app.use(cors());
+app.use(cors());   //anybody can access this data from API
 
 app.get('/', function (req, res) {
-    res.send('Hello World')
+    res.send('To-do app data is available, access the data and create the world class web apps. Happy Coding 😊')
 })
 
-app.get('/todo', async function (req, res) {
-    const data = await client.db("users").collection("todo").find({}).toArray();
-    console.log(data);
-    res.send(data);
-})
 
-app.post('/todo', async function (req, res) {
+// Add new user ✅
+app.post('/users', async function (req, res) {
     const data = req.body;
-    const oneTodo = await client.db("users").collection("todo").insertMany(data);
+    const oneTodo = await client.db("todo-app").collection("users").insertOne(data);
     console.log(oneTodo);
     oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not fullfilled" });
 })
 
-// delete all todos
-app.delete('/todo', async function (req, res) {
-    const oneTodo = await client.db("users").collection("todo").deleteMany({});
-    oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
+// Get all users data
+app.get('/users', async function (req, res) {
+    const data = await client.db("todo-app").collection("users").find({}).toArray();
+    console.log(data);
+    res.send(data);
 })
 
-// delete todos
-app.delete('/todo', async function (req, res) {
-    const data = req.query;
-    const oneTodo = await client.db("users").collection("todo").findMany(req.query);
-    // console.log(oneTodo);
-    oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
+// Get user by email
+app.get('/users', async function (req, res) {
+    const data = await client.db("todo-app").collection("users").find({}).toArray();
+    console.log(data);
+    res.send(data);
 })
 
-// delete todo by id
-app.get('/todo/:id', async function (req, res) {
-    const { id } = req.params;
-    const oneTodo = await client.db("users").collection("todo").deleteOne({ _id: ObjectId(id) });
-    // console.log(oneTodo);
-    oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
-})
+
+
+// // delete all todos
+// app.delete('/users', async function (req, res) {
+//     const oneTodo = await client.db("users").collection("todo").deleteMany({});
+//     oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
+// })
+
+// // delete todos
+// app.delete('/users', async function (req, res) {
+//     const data = req.query;
+//     const oneTodo = await client.db("users").collection("todo").findMany(req.query);
+//     // console.log(oneTodo);
+//     oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
+// })
+
+// // delete todo by id
+// app.get('/users/:id', async function (req, res) {
+//     const { id } = req.params;
+//     const oneTodo = await client.db("users").collection("todo").deleteOne({ _id: ObjectId(id) });
+//     // console.log(oneTodo);
+//     oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
+// })
 
 
 
