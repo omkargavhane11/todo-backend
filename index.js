@@ -37,19 +37,18 @@ app.post('/users', async function (req, res) {
     console.log(oneTodo);
     oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not fullfilled" });
 })
-
 // Get all users data
 app.get('/users', async function (req, res) {
     const data = await client.db("todo-app").collection("users").find({}).toArray();
     console.log(data);
     res.send(data);
 })
-
-// Get user by email
-app.get('/users', async function (req, res) {
-    const data = await client.db("todo-app").collection("users").find({}).toArray();
-    console.log(data);
-    res.send(data);
+// Get user by username
+app.get('/users/:username', async function (req, res) {
+    const user = req.params;
+    const data = await client.db("todo-app").collection("users").findOne({ "username": user.username });
+    console.log(user.username);
+    data ? res.send(data) : res.send({ "error": "user not found" })
 })
 
 
