@@ -18,29 +18,6 @@ async function createConnection() {
 }
 const client = await createConnection();
 
-// const list = [
-//     {
-//         id: "101",
-//         heading: "buy clothes",
-//         description: "clothes have to be bought from amazon.com for getting variety of products to but and have a wide range of slection choices."
-//     },
-//     {
-//         id: "102",
-//         heading: "car",
-//         description: "clothes have to be bought from amazon.com for getting variety of products to but and have a wide range of slection choices."
-//     },
-//     {
-//         id: "103",
-//         heading: "buy washing machine",
-//         description: "clothes have to be bought from amazon.com for getting variety of products to but and have a wide range of slection choices."
-//     },
-//     {
-//         id: "104",
-//         heading: "complete assignment",
-//         description: "clothes have to be bought from amazon.com for getting variety of products to but and have a wide range of slection choices."
-//     },
-// ]
-
 app.use(express.json());
 
 app.get('/', function (req, res) {
