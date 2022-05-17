@@ -48,18 +48,18 @@ app.delete('/todo', async function (req, res) {
     oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
 })
 
-// delete todo 
+// delete todos
 app.delete('/todo', async function (req, res) {
     const data = req.query;
     const oneTodo = await client.db("todo").collection("todo").findMany(req.query);
-    console.log(oneTodo);
-    // oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
+    // console.log(oneTodo);
+    oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
 })
 
 // delete todo by id
 app.get('/todo/:id', async function (req, res) {
     const { id } = req.params;
-    const oneTodo = await client.db("todo").collection("todo").findOne({ _id: ObjectId(id) });
+    const oneTodo = await client.db("todo").collection("todo").deleteOne({ _id: ObjectId(id) });
     // console.log(oneTodo);
     oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
 })
