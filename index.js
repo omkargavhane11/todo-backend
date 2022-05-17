@@ -2,6 +2,7 @@
 import express from 'express';
 import { MongoClient } from 'mongodb';
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 
@@ -20,6 +21,9 @@ const client = await createConnection();
 
 app.use(express.json());
 
+// third party package - middleware
+app.use(cors());
+
 app.get('/', function (req, res) {
     res.send('Hello World')
 })
@@ -37,19 +41,26 @@ app.post('/todo', async function (req, res) {
     oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not fullfilled" });
 })
 
+// delete all todos
 app.delete('/todo', async function (req, res) {
-    // const { id } = req.params;
     const oneTodo = await client.db("todo").collection("todo").deleteMany({});
-    // console.log(oneTodo);
     oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
 })
 
-// app.get('/todo/:id', async function (req, res) {
-//     const { id } = req.params;
-//     const oneTodo = await client.db("todo").collection("todo").findOne({ id: "101" });
-//     console.log(oneTodo);
-//     oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
-// })
+// delete todo on query
+app.delete('/todo', async function (req, res) {
+    const data = req.query;
+    const oneTodo = await client.db("todo").collection("todo").findMany(req.query);
+    console.log(oneTodo);
+    // oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
+})
+
+app.get('/todo/:id', async function (req, res) {
+    const { id } = req.params;
+    const oneTodo = await client.db("todo").collection("todo").findOne({ _id: "6283b49938f52a7baa4a65bb" });
+    console.log(oneTodo);
+    oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not found" });
+})
 
 
 
