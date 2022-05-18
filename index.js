@@ -73,6 +73,14 @@ app.get('/todo/:username', async function (req, res) {
     data ? res.send(data) : res.send({ "error": "user not found" })
 })
 
+// Get todo by username copy for adding todo
+app.get('/todo/:username/addtodo', async function (req, res) {
+    const user = req.params;
+    const data = await client.db("todo-app").collection("to-do").find({ "username": user.username }).toArray();
+    console.log(user.username);
+    data ? res.send(data) : res.send({ "error": "user not found" })
+})
+
 
 
 
