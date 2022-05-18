@@ -80,7 +80,13 @@ app.get('/todo/addtodo/:username', async function (req, res) {
     console.log(user.username);
     data ? res.send(data) : res.send({ "error": "user not found" })
 })
-
+// Get todo by username
+app.post('/todo/:username', async function (req, res) {
+    const user = req.body;
+    const data = await client.db("todo-app").collection("to-do").insertOne({ "username": user.username });
+    console.log(user.username);
+    data ? res.send(data) : res.send({ "error": "user not found" })
+})
 
 
 
