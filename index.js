@@ -74,7 +74,7 @@ app.get('/todo/:username', async function (req, res) {
 })
 
 // Get todo by username copy for adding todo
-app.get('/todo/:username/addtodo', async function (req, res) {
+app.get('/todo/addtodo/:username', async function (req, res) {
     const user = req.params;
     const data = await client.db("todo-app").collection("to-do").find({ "username": user.username }).toArray();
     console.log(user.username);
