@@ -94,10 +94,11 @@ app.get('/todo/edit/:id', async function (req, res) {
     res.send(await client.db('todo-app').collection('to-do').findOne({ _id: ObjectId(q.id) }));
 })
 // DELETE
-app.delete('/todo', async function (req, res) {
-    const q = req.query;
+app.delete('/todo/edit/:id', async function (req, res) {
+    const q = req.params;
     const data = await client.db('todo-app').collection('to-do').deleteOne({ _id: ObjectId(q.id) });
     res.send(data);
+    console.log(q.id);
 })
 
 
