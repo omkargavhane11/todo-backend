@@ -43,8 +43,8 @@ app.get('/', function (req, res) {
 // GET all todo ✅
 // GET todo by username ✅ 
 // GET todo by _id  ✅
-// DELETE todo by id 
-// PUT todo by _id
+// DELETE todo by id  ✅
+// PUT todo by _id 
 
 
 app.post('/users', async function (req, res) {
@@ -100,10 +100,13 @@ app.delete('/todo/edit/:id', async function (req, res) {
     res.send(data);
     console.log(q.id);
 })
-
-
-
-
+// PUT
+app.put('/todo/edit/:id', async function (req, res) {
+    const q = req.params;
+    const updateData = req.body;
+    const data = await client.db('todo-app').collection('to-do').updateOne({ _id: ObjectId(q.id) }, { $set: updateData });
+    res.send(updateData);
+})
 
 
 
