@@ -81,7 +81,7 @@ app.get('/todo/:username', async function (req, res) {
 })
 app.get('/todo/:id', async function (req, res) {
     const { id } = req.params;
-    const data = await client.db('todo-app').collection('to-do').find({ "_id": ObjectId(`${id}`) }).toArray();
+    const data = await client.db('todo-app').collection('to-do').find({ "_id": ObjectId(id) }).toArray();
     // data ? res.send(data) : res.send("not found");
     console.log(id);
     res.send(data);
