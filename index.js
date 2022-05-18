@@ -52,6 +52,32 @@ app.get('/users/:username', async function (req, res) {
 })
 
 
+// Add new to-do to a list ✅
+app.post('/todo', async function (req, res) {
+    const data = req.body;
+    const oneTodo = await client.db("todo-app").collection("to-do").insertOne(data);
+    console.log(oneTodo);
+    oneTodo ? res.send(oneTodo) : res.status(404).send({ "error": "request not fullfilled" });
+})
+// Get all to-do data
+app.get('/todo', async function (req, res) {
+    const data = await client.db("todo-app").collection("to-do").find({}).toArray();
+    console.log(data);
+    res.send(data);
+})
+// Get user by username
+app.get('/todo/:username', async function (req, res) {
+    const user = req.params;
+    const data = await client.db("todo-app").collection("to-do").findOne({ "username": user.username });
+    console.log(user.username);
+    data ? res.send(data) : res.send({ "error": "user not found" })
+})
+
+
+
+
+
+
 
 // // delete all todos
 // app.delete('/users', async function (req, res) {
