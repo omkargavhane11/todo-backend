@@ -15,7 +15,7 @@ const MONGO_URL = process.env.MONGO_URL;
 async function createConnection() {
     const client = new MongoClient(MONGO_URL)
     await client.connect();
-    console.log("Mongo is connected ✅")
+    console.log("MongoDB is connected ✅")
     return client;
 }
 const client = await createConnection();
@@ -39,6 +39,7 @@ app.get('/', function (req, res) {
 // DELETE user by username ✅
 
 // todo -> 
+// POST new todo 
 // GET all todo ✅
 // GET todo by username ✅ 
 // GET todo by _id  
@@ -69,25 +70,25 @@ app.delete('/users/:username', async function (req, res) {
 
 // ****************************************************************
 
-app.get('/todo', async function (req, res) {
-    const data = await client.db('todo-app').collection('to-do').find({}).toArray();
-    res.send(data);
+
+app.post('/todo', async function (req, res) {
+    const data = req.body;
+    const result = await client.db('todo-app').collection('to-do').insertOne(data);
+    res.send(result);
 })
+app.get('/todo', async function (req, res) {
+    const q = req.query;
+    const data = await client.db('todo-app').collection('to-do').find({}).toArray();
+    q.id ? res.send(await client.db('todo-app').collection('to-do').findOne({ _id: ObjectId(q.id) })) : res.send(data);
+    // console.log(data);
+})
+
 app.get('/todo/:username', async function (req, res) {
     const { username } = req.params;
     const data = await client.db('todo-app').collection('to-do').find({ username: username }).toArray();
     console.log(username);
     res.send(data);
 })
-app.get('/todo/:id', async function (req, res) {
-    const { id } = req.params;
-    const data = await client.db('todo-app').collection('to-do').find({ "_id": ObjectId(id) }).toArray();
-    // data ? res.send(data) : res.send("not found");
-    console.log(id);
-    res.send(data);
-})
-
-
 
 
 
