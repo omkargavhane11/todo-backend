@@ -39,10 +39,10 @@ app.get('/', function (req, res) {
 // DELETE user by username ✅
 
 // todo -> 
-// POST new todo 
+// POST new todo ✅
 // GET all todo ✅
 // GET todo by username ✅ 
-// GET todo by _id  
+// GET todo by _id  ✅
 // DELETE todo by id 
 // PUT todo by _id
 
@@ -80,7 +80,6 @@ app.get('/todo', async function (req, res) {
     const q = req.query;
     const data = await client.db('todo-app').collection('to-do').find({}).toArray();
     q.id ? res.send(await client.db('todo-app').collection('to-do').findOne({ _id: ObjectId(q.id) })) : res.send(data);
-    // console.log(data);
 })
 
 app.get('/todo/:username', async function (req, res) {
@@ -89,6 +88,11 @@ app.get('/todo/:username', async function (req, res) {
     console.log(username);
     res.send(data);
 })
+app.get('/todo/edit/:id', async function (req, res) {
+    const q = req.params;
+    res.send(await client.db('todo-app').collection('to-do').findOne({ _id: ObjectId(q.id) }));
+})
+
 
 
 
