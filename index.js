@@ -61,13 +61,14 @@ app.post('/todo', async function (req, res) {
 })
 // Get all to-do data
 app.get('/todo', async function (req, res) {
+    const { username } = req.query;
     const data = await client.db("todo-app").collection("to-do").find({}).toArray();
-    console.log(data);
-    res.send(data);
+    // console.log(query.username);
+    data ? res.send(data.filter((m) => m.username == username)) : res.send(data);
 })
 // Get todo by username
 app.get('/todo/:username', async function (req, res) {
-    const user = req.params;
+    const user = req.query;
     const data = await client.db("todo-app").collection("to-do").find({ "username": user.username }).toArray();
     console.log(user.username);
     data ? res.send(data) : res.send({ "error": "user not found" })
