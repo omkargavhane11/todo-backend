@@ -88,9 +88,16 @@ app.get('/todo/:username', async function (req, res) {
     console.log(username);
     res.send(data);
 })
+// EDIT
 app.get('/todo/edit/:id', async function (req, res) {
     const q = req.params;
     res.send(await client.db('todo-app').collection('to-do').findOne({ _id: ObjectId(q.id) }));
+})
+// DELETE
+app.delete('/todo', async function (req, res) {
+    const q = req.query;
+    const data = await client.db('todo-app').collection('to-do').deleteOne({ _id: ObjectId(q.id) });
+    res.send(data);
 })
 
 
