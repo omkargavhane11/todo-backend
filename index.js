@@ -68,7 +68,7 @@ app.get('/todo', async function (req, res) {
 // Get user by username
 app.get('/todo/:username', async function (req, res) {
     const user = req.params;
-    const data = await client.db("todo-app").collection("to-do").findMany({ "username": user.username });
+    const data = await client.db("todo-app").collection("to-do").find({ "username": user.username });
     console.log(user.username);
     data ? res.send(data) : res.send({ "error": "user not found" })
 })
