@@ -51,7 +51,6 @@ app.get('/', function (req, res) {
 // Add new user
 app.post('/users', async function (req, res) {
     const newUser = req.body;
-    const checkUser = 
     const data = await client.db('todo-app').collection('users').insertOne(newUser);
     res.send(data);
 })
