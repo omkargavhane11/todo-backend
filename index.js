@@ -36,6 +36,8 @@ app.get('/', function (req, res) {
 // POST new user ✅
 // GET all users ✅
 // GET users by username ✅
+// GET users by id ✅
+// DELETE user by id ✅
 // DELETE user by username ✅
 
 // todo -> 
@@ -44,23 +46,44 @@ app.get('/', function (req, res) {
 // GET todo by username ✅ 
 // GET todo by _id  ✅
 // DELETE todo by id  ✅
-// PUT todo by _id 
+// PUT todo by _id  ✅
 
-
+// Add new user
 app.post('/users', async function (req, res) {
     const newUser = req.body;
+    const checkUser = 
     const data = await client.db('todo-app').collection('users').insertOne(newUser);
     res.send(data);
 })
+// Get all users
 app.get('/users', async function (req, res) {
     const data = await client.db('todo-app').collection('users').find({}).toArray();
     res.send(data);
 })
+//  Get user by id
+app.get('/users/:id', async function (req, res) {
+    const q = req.params;
+    res.send(await client.db('todo-app').collection('users').findOne({ _id: ObjectId(q.id) }));
+})
+// Get user by username
 app.get('/users/:username', async function (req, res) {
     const { username } = req.params;
     const data = await client.db('todo-app').collection('users').find({ username: username }).toArray();
     res.send(data);
 })
+// Get user by username
+app.get('/users/:username', async function (req, res) {
+    const { username } = req.params;
+    const data = await client.db('todo-app').collection('users').find({ username: username }).toArray();
+    res.send(data);
+})
+// Delete user by id
+app.delete('/users/:id', async function (req, res) {
+    const q = req.params;
+    const data = await client.db('todo-app').collection('users').deleteOne({ _id: ObjectId(q.id) });
+    res.send(data);
+})
+// Delete user by username
 app.delete('/users/:username', async function (req, res) {
     const { username } = req.params;
     const data = await client.db('todo-app').collection('users').deleteOne({ username: username });
@@ -98,7 +121,6 @@ app.delete('/todo/edit/:id', async function (req, res) {
     const q = req.params;
     const data = await client.db('todo-app').collection('to-do').deleteOne({ _id: ObjectId(q.id) });
     res.send(data);
-    console.log(q.id);
 })
 // PUT
 app.put('/todo/edit/:id', async function (req, res) {
