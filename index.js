@@ -74,17 +74,17 @@ app.get('/users/:username', async function (req, res) {
 })
 
 // Delete user by id ✅
-app.delete('/users/:id', async function (req, res) {
-    const q = req.params;
-    const data = await client.db('todo-app').collection('users').deleteOne({ _id: ObjectId(q.id) });
-    res.send(data);
-})
-// Delete user by username ✅
-// app.delete('/users/:username', async function (req, res) {
-//     const { username } = req.params;
-//     const data = await client.db('todo-app').collection('users').deleteOne({ username: username });
+// app.delete('/users/:id', async function (req, res) {
+//     const q = req.params;
+//     const data = await client.db('todo-app').collection('users').deleteOne({ _id: ObjectId(q.id) });
 //     res.send(data);
 // })
+// Delete user by username ✅
+app.delete('/users/:username', async function (req, res) {
+    const { username } = req.params;
+    const data = await client.db('todo-app').collection('users').deleteOne({ username: username });
+    res.send(data);
+})
 
 
 // ****************************************************************
