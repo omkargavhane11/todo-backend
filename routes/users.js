@@ -1,18 +1,23 @@
 import express from 'express';
 import { client, genPassword } from '../index.js';
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken';
+import dotenv from "dotenv";
+import { auth } from '../middleware/auth.js';
 
+// dotenv.config();
 const router = express.Router();
 
 // Add new user ✅✅
 router.post('/signup', async function (req, res) {
     const { username, password, email } = req.body;
     const hashedPassword = await genPassword(password);
-    const findUser = await client.db('todo-app').collection('users').find({ username: username }).toArray();
+    const findUsername = await client.db('todo-app').collection('users').findOne({ username: username });
+    const findEmail = await client.db('todo-app').collection('users').findOne({ email: email });
     const newUser = { username: username, password: hashedPassword.hashedPassword, email: email };
     const data = await client.db('todo-app').collection('users').insertOne(newUser);
-    if (findUser) {
-        res.status(400).send({ "error": "user already exists" })
+    if (findUsername || findEmail) {
+        res.status(400).send({ "error": "user already exists with given credentials" })
     } else {
         res.send(data);
     }
@@ -28,7 +33,8 @@ router.post('/login', async function (req, res) {
         const isPasswordMatch = await bcrypt.compare(password, storedPassword);
 
         if (isPasswordMatch) {
-            res.send({ "msg": "successfull login" });
+            const token = jwt.sign({ id: checkUsername._id }, process.env.SECRET_KEY);
+            res.send({ "msg": "successfull login", token });
         } else {
             res.send({ "error": "invalid credentials" });
         }
