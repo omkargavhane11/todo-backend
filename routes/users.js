@@ -1,6 +1,6 @@
 import express from 'express';
 import { client, genPassword } from '../index.js';
-
+import bcrypt from "bcrypt";
 
 const router = express.Router();
 
@@ -16,7 +16,23 @@ router.post('/signup', async function (req, res) {
     } else {
         res.send(data);
     }
+})
+// Login
+router.post('/login', async function (req, res) {
+    const { username, password, email } = req.body;
+    const checkUsername = await client.db('todo-app').collection('users').findOne({ username: username });
+    if (!checkUsername) {
+        res.send({ "error": "invalid credentials" });
+    } else {
+        const storedPassword = checkUsername.password;
+        const isPasswordMatch = await bcrypt.compare(password, storedPassword);
 
+        if (isPasswordMatch) {
+            res.send({ "msg": "successfull login" });
+        } else {
+            res.send({ "error": "invalid credentials" });
+        }
+    }
 })
 // Get all users ✅
 router.get('/', async function (req, res) {
