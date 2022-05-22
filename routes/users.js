@@ -1,13 +1,22 @@
 import express from 'express';
-import { client } from '../index.js';
+import { client, genPassword } from '../index.js';
+
 
 const router = express.Router();
 
-// Add new user ✅
-router.post('/', async function (req, res) {
-    const newUser = req.body;
+// Add new user ✅✅
+router.post('/signup', async function (req, res) {
+    const { username, password, email } = req.body;
+    const hashedPassword = await genPassword(password);
+    const findUser = await client.db('todo-app').collection('users').find({ username: username }).toArray();
+    const newUser = { username: username, password: hashedPassword.hashedPassword, email: email };
     const data = await client.db('todo-app').collection('users').insertOne(newUser);
-    res.send(data);
+    if (findUser) {
+        res.status(400).send({ "error": "user already exists" })
+    } else {
+        res.send(data);
+    }
+
 })
 // Get all users ✅
 router.get('/', async function (req, res) {
@@ -23,9 +32,9 @@ router.get('/', async function (req, res) {
 
 // // Get user by username ✅
 router.get('/:username', async function (req, res) {
-    const { username } = req.params;
-    const data = await client.db('todo-app').collection('users').find({ username: username }).toArray();
-    res.send(data);
+    const { username, email } = req.params;
+    const findUser = await client.db('todo-app').collection('users').find({ $or: [{ username: username }, { email: email }] }).toArray();
+    res.send(findUser);
 })
 
 // Delete user by id ✅

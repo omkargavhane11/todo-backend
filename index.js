@@ -25,7 +25,6 @@ async function createConnection() {
 
 export const client = await createConnection();
 
-
 app.use(express.json());    // converts data to json
 
 // third party package - middleware
@@ -38,18 +37,13 @@ app.get('/', function (req, res) {
 app.use('/todo', todoRouter);
 app.use('/users', usersRouter);
 
-
-
-
 app.listen(PORT, () => console.log(`Started server at ${PORT} 😎`));
 
-
-
-// async function genPassword(password) {
-//     const NO_OF_ROUNDS = 10;
-//     const salt = await bcrypt.genSalt(NO_OF_ROUNDS);
-//     const hashedPassword = await bcrypt.hash(password, salt);
-//     return { hashedPassword };
-// }
+export async function genPassword(password) {
+    const NO_OF_ROUNDS = 10;
+    const salt = await bcrypt.genSalt(NO_OF_ROUNDS);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    return { hashedPassword };
+}
 
 // console.log(await genPassword("welcome"));
